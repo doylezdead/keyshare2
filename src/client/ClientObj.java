@@ -112,20 +112,20 @@ public class ClientObj extends Applet{
 					skt = new Socket(address, 13337);
 
 					oos = new ObjectOutputStream(skt.getOutputStream());		
-
+					/*
 					while(true){
-						Thread.sleep(15);
+						Thread.wait(15);
 
 						if(commands[0]==20){
 							break;
 
 						}
-						oos.writeObject(commands);
-						System.out.println(commands[2]);
-					}					
-					oos.writeObject(commands);
-					skt.close();
-					oos.close();
+						//oos.writeObject(commands);
+						//System.out.println(commands[2]);
+					}	
+					*/
+					//oos.writeObject(commands);
+					
 					break;
 				}
 				catch(Exception e) {
@@ -164,27 +164,72 @@ public class ClientObj extends Applet{
 		@Override
 		public void mouseExited(MouseEvent e) {}
 		@Override
+		
+		
+		
 		public void mousePressed(MouseEvent e) {
 			//sets commands to a default of -1
-			for(int i=0; i<commands.length; i++){
-				commands[i] = -1;
+			try {
+				oos.reset();
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
 			}
+			
 			commands[0]=0;
 			commands[1]=0;
 			switch(e.getModifiers()){
 			case InputEvent.BUTTON1_MASK: {
+				//oos.flush();
 				System.out.println("LEFT PRESS");
 				commands[2]=0;
+				
+				
+				try {
+					oos.writeObject(commands);
+					
+				} catch (IOException e1) {
+					e1.printStackTrace();
+			
+				}
+				
+				
+				
+				commands[0] = -1;
+				commands[1] = -1;
+				commands[2] = -1;
 				break;
 			}
 			case InputEvent.BUTTON2_MASK: {
 				System.out.println("MIDDLE PRESS");
 				commands[2]=1;
+				try {
+					oos.writeObject(commands);
+					
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				commands[0] = -1;
+				commands[1] = -1;
+				commands[2] = -1;
 				break;
 			}
 			case InputEvent.BUTTON3_MASK: {
 				System.out.println("RIGHT PRESS");
 				commands[2]=2;
+				
+			/*	
+				try {
+					oos.writeObject(commands);
+					
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				*/
+				
+				commands[0] = -1;
+				commands[1] = -1;
+				commands[2] = -1;
 				break;
 			}
 			}
@@ -192,26 +237,63 @@ public class ClientObj extends Applet{
 		}
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			//sets commands to a default of -1
-			for(int i=0; i<commands.length; i++){
-				commands[i] = -1;
+			try {
+				oos.reset();
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
 			}
+			//sets commands to a default of -1
+			System.out.println("MOUSE WAS RELEASEED");
 			commands[0]=0;
 			commands[1]=1;
 			switch(e.getModifiers()){
 			case InputEvent.BUTTON1_MASK: {
 				System.out.println("LEFT RELEASE");
 				commands[2]=0;
+			/*	
+				
+				try {
+					System.out.println(commands[1]);
+					oos.writeObject(commands);
+					
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				
+				
+				*/
+				commands[0] = -1;
+				commands[1] = -1;
+				commands[2] = -1;
 				break;
 			}
 			case InputEvent.BUTTON2_MASK: {
 				System.out.println("MIDDLE RELEASE");
 				commands[2]=1;
+				try {
+					oos.writeObject(commands);
+					
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				commands[0] = -1;
+				commands[1] = -1;
+				commands[2] = -1;
 				break;
 			}
 			case InputEvent.BUTTON3_MASK: {
 				System.out.println("RIGHT RELEASE");
 				commands[2]=2;
+				try {
+					oos.writeObject(commands);
+					
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				commands[0] = -1;
+				commands[1] = -1;
+				commands[2] = -1;
 				break;
 			}
 			}
@@ -221,11 +303,24 @@ public class ClientObj extends Applet{
 		//MouseWheelListener stuff
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e){
-			//sets commands to a default of -1
-			for(int i=0; i<commands.length; i++){
-				commands[i] = -1;
+			try {
+				oos.reset();
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
 			}
+			//sets commands to a default of -1
+			
 			commands[0]=1;
+			try {
+				oos.writeObject(commands);
+				
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			commands[0] = -1;
+			commands[1] = -1;
+			commands[2] = -1;
 			int rotation = e.getWheelRotation();
 			commands[1]=rotation;
 			System.out.println(rotation);
@@ -236,25 +331,61 @@ public class ClientObj extends Applet{
 		@Override
 		public void mouseDragged(MouseEvent e){
 			//sets commands to a default of -1
-			for(int i=0; i<commands.length; i++){
-				commands[i] = -1;
+			try {
+				oos.reset();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			commands[0]=2;
+			
 			Point coords = MouseInfo.getPointerInfo().getLocation();
 			commands[1]=(int) coords.getX();
 			commands[2]=(int) coords.getY();
+
+
+			try {
+				oos.writeObject(commands);
+				
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		
+			
+			commands[0] = -1;
+			commands[1] = -1;
+			commands[2] = -1;
 			System.out.println("x:" + coords.getX() + " y:" + coords.getY());
 		}
 		@Override
 		public void mouseMoved(MouseEvent e){
 			//sets commands to a default of -1
-			for(int i=0; i<commands.length; i++){
-				commands[i] = -1;
+			try {
+				oos.reset();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			commands[0]=2;
+			
 			Point coords = MouseInfo.getPointerInfo().getLocation();
 			commands[1]=(int) coords.getX();
 			commands[2]=(int) coords.getY();
+			
+	
+			
+			try {
+				oos.writeObject(commands);
+				
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+			
+			
+			commands[0] = -1;
+			commands[1] = -1;
+			commands[2] = -1;
 			System.out.println("x:" + coords.getX() + " y:" + coords.getY());
 		}
 
@@ -263,29 +394,60 @@ public class ClientObj extends Applet{
 		@Override
 		public void keyPressed(KeyEvent e){
 			//sets commands to a default of -1
-			for(int i=0; i<commands.length; i++){
-				commands[i] = -1;
+			try {
+				oos.reset();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			commands[0]=3;
 			commands[1]=0;
 			int key = e.getKeyCode();
 			commands[2]=key;
+			try {
+				oos.writeObject(commands);
+				
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			commands[0] = -1;
+			commands[1] = -1;
+			commands[2] = -1;
 			System.out.println(key + " PRESS");
-
+			
 		}
 		@Override
 		public void keyReleased(KeyEvent e){
 			//sets commands to a default of -1
-			for(int i=0; i<commands.length; i++){
-				commands[i] = -1;
+			try {
+				oos.reset();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			commands[0]=3;
 			commands[1]=1;
 			int key = e.getKeyCode();
 			commands[2]=key;
+			
+			
+			try {
+				oos.writeObject(commands);
+				
+				for(int i = 0; i<3; i++){
+					System.out.print(commands[i]+", ");
+				}
+				System.out.println();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			commands[0] = -1;
+			commands[1] = -1;
+			commands[2] = -1;
 			System.out.println(key + " RELEASE");
 		}
 		@Override
 		public void keyTyped(KeyEvent e){}
+		
 	}
 }

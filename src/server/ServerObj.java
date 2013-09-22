@@ -24,23 +24,19 @@ public class ServerObj extends Applet {
 		new ServerGUI();
 	}
 
+	
 	public class ServerGUI {
-
 		protected JButton disconnect;
 
 		public ServerGUI() {
 			// Create a new JFrame.
 			JFrame gui = new JFrame();
-
 			// set up grid layout with 1 row and column.
 			gui.setLayout(new GridLayout(1, 1));
-
 			// make the program terminate when the window is closed
 			gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 			// give the window a title
 			gui.setTitle("Server Control");
-
 			// set the size of the window
 			gui.setSize(250, 200);
 
@@ -53,6 +49,7 @@ public class ServerObj extends Applet {
 		}
 	}
 
+	
 	public class ServerListener implements ActionListener {
 		public JFrame Gui;
 
@@ -65,8 +62,8 @@ public class ServerObj extends Applet {
 		}
 	}
 
+	
 	public class Server extends Thread {
-
 		public Server() {
 			this.run();
 		}
@@ -91,7 +88,6 @@ public class ServerObj extends Applet {
 				int[] readArray = null;
 
 				while (true) {
-					// Thread.sleep(5);
 					readArray = (int[]) ois.readObject();
 					if (readArray[0] == 10)
 						break;
@@ -101,19 +97,19 @@ public class ServerObj extends Applet {
 					}
 					System.out.println();
 					robot.work(readArray);
-
 				}
 
 				out.close(); //
 				skt.close(); // close all resources
 				srvr.close(); //
-			} catch (Exception e) {
+			} 
+			catch (Exception e) {
 				e.printStackTrace();// "No connection found\n");
 			}
 		}
-
 	}
 
+	
 	public class WorkerRobot {
 		private Robot walle;
 
@@ -121,17 +117,33 @@ public class ServerObj extends Applet {
 		public WorkerRobot() {
 			try {
 				walle = new Robot();
-			} catch (AWTException e) {
+			} 
+			catch (AWTException e) {
 				System.out.println("Wall-e has died");
 			}
 		}
 
 		/**
-		 * recieves an array of integers [0]: (0,1,2,3) 0: mouse click [1]:
-		 * (0,1) 0: mouse press 1: mouse release [2]: (0,1,2) 0: left button 1:
-		 * middle button 2: right button 1: mouse wheel [1]: number of notches
-		 * 2: mouse motion [1]: x coordinates [2]: y coordinates 3: keyboard
-		 * [1]: (0,1) 0: key press 1: key release [2]: key number
+		 * recieves an array of integers 
+		 *     [0]: (0,1,2,3) 
+		 *         0: mouse click 
+		 *             [1]: (0,1) 
+		 *                 0: mouse press 
+		 *                 1: mouse release 
+		 *             [2]: (0,1,2) 
+		 *                 0: left button 
+		 *                 1: middle button 
+		 *                 2: right button 
+		 *         1: mouse wheel 
+		 *             [1]: number of notches
+		 *         2: mouse motion 
+		 *             [1]: x coordinates 
+		 *             [2]: y coordinates 
+		 *         3: keyboard
+		 *             [1]: (0,1) 
+		 *                 0: key press 
+		 *                 1: key release 
+		 *             [2]: key number
 		 */
 		public void work(int[] task) {
 			// mouse click
@@ -187,5 +199,4 @@ public class ServerObj extends Applet {
 			}
 		}
 	}
-
 }

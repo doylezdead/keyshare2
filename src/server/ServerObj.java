@@ -1,4 +1,5 @@
 package server;
+
 import java.applet.Applet;
 import java.awt.AWTException;
 import java.awt.Dimension;
@@ -16,11 +17,6 @@ import java.net.Socket;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-/**
- * Keyshare: the keyboard and mouse sharing program
- * @author Sven Stroven, Ryan Doyle, Chris Coppernoll
- */
-
 public class ServerObj extends Applet {
 
 	protected Dimension clientSS;
@@ -29,7 +25,7 @@ public class ServerObj extends Applet {
 
 	protected Dimension serverSS = Toolkit.getDefaultToolkit().getScreenSize();
 	private ObjectInputStream ois = null;
-	
+
 	WorkerRobot robot = null;
 
 	public void init() {
@@ -110,11 +106,11 @@ public class ServerObj extends Applet {
 					readArray = (int[]) ois.readObject();
 					if (readArray[0] == 10)
 						break;
-
-					//for (int i = 0; i < readArray.length; i++) {
-					//	System.out.print(readArray[i] + ", ");
-					//}
-					//System.out.println();
+					//
+					// for (int i = 0; i < readArray.length; i++) {
+					// System.out.print(readArray[i] + ", ");
+					// }
+					// System.out.println();
 					robot.work(readArray);
 				}
 
@@ -185,7 +181,13 @@ public class ServerObj extends Applet {
 			}
 			// mouse motion
 			else if (task[0] == 2) {
-				walle.mouseMove(task[1] * wRatio, task[2] * hRatio);
+				if (wRatio < 1) {
+					wRatio = 1;
+				}
+				if (hRatio < 1) {
+					hRatio = 1;
+				}
+				walle.mouseMove(task[1] * wRatio, task[2] * hRatio - 45);
 
 			}
 			// keyboard

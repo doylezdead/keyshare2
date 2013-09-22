@@ -1,5 +1,4 @@
 package server;
-
 import java.applet.Applet;
 import java.awt.AWTException;
 import java.awt.Dimension;
@@ -16,6 +15,11 @@ import java.net.Socket;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+
+/**
+ * Keyshare: the keyboard and mouse sharing program
+ * @author Sven Stroven, Ryan Doyle, Chris Coppernoll
+ */
 
 public class ServerObj extends Applet {
 
@@ -94,7 +98,7 @@ public class ServerObj extends Applet {
 				clientSS = (Dimension) ois.readObject();
 				wRatio = serverSS.width / clientSS.width;
 				hRatio = serverSS.height / clientSS.height;
-				clientSS.setSize(clientSS.width / 2, clientSS.height / 2);
+				clientSS.setSize(clientSS.width, clientSS.height);
 
 				PrintWriter out = new PrintWriter(skt.getOutputStream(), true); // skt's
 				// output
@@ -107,10 +111,10 @@ public class ServerObj extends Applet {
 					if (readArray[0] == 10)
 						break;
 
-					for (int i = 0; i < readArray.length; i++) {
-						System.out.print(readArray[i] + ", ");
-					}
-					System.out.println();
+					//for (int i = 0; i < readArray.length; i++) {
+					//	System.out.print(readArray[i] + ", ");
+					//}
+					//System.out.println();
 					robot.work(readArray);
 				}
 

@@ -24,6 +24,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
+/**
+ * Keyshare: the keyboard and mouse sharing program
+ * @author Sven Stroven, Ryan Doyle, Chris Coppernoll
+ */
+
 public class ClientObj extends Applet {
 	private InputReader ir;
 	private Socket skt = null;
@@ -49,27 +54,27 @@ public class ClientObj extends Applet {
 		public ClientGUI() {
 			JFrame cGui = new JFrame();
 			// set up grid layout with rows and columns equal to size.
-			cGui.setLayout(new GridLayout(3, 1));
+			cGui.setLayout(new GridLayout(2, 1));
 			// make the program terminate when the window is closed
 			cGui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			// give the window a title
 			cGui.setTitle("Client Initiator");
 			// set the size of the window
-			cGui.setSize(clientSS.width / 3, clientSS.height / 3);
+			cGui.setSize(clientSS.width/3, clientSS.height/3);
 
 			cGui.setLocation(clientSS.width - clientSS.width / 3,
-					clientSS.height);
+					clientSS.height/3);
 
 			IP = new JTextField("Enter a remote IP address");
 			start = new JButton("Start");
-			end = new JButton("End");
+			//end = new JButton("End");
 
 			start.addActionListener(new ClientListener(this, cGui, false));
-			end.addActionListener(new ClientListener(this, cGui, true));
+			//end.addActionListener(new ClientListener(this, cGui, true));
 
 			cGui.add(IP);
 			cGui.add(start);
-			cGui.add(end);
+			//cGui.add(end);
 
 			cGui.setVisible(true);
 		}
@@ -90,10 +95,10 @@ public class ClientObj extends Applet {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			if (end == true) {
-				System.exit(1);
+			//if (end == true) {
+			//	System.exit(1);
 
-			} else if (initiated == true) {
+			if (initiated == true) {
 
 			} else {
 				Client.start.setText("Reconnect");
@@ -153,8 +158,8 @@ public class ClientObj extends Applet {
 
 		private InputReader(Applet aParent) {
 			mParent = aParent;
-			mParent.setSize(clientSS.width / 3, clientSS.height / 3);
-			mParent.setLocation(0, clientSS.height);
+			mParent.setSize(clientSS.width, clientSS.height);
+			//mParent.setLocation(0, clientSS.height);
 		}
 
 		// MouseListener stuff

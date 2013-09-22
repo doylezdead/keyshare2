@@ -2,8 +2,10 @@ package server;
 
 import java.applet.Applet;
 import java.awt.AWTException;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -17,39 +19,45 @@ import javax.swing.JFrame;
 
 public class ServerObj extends Applet {
 
+	protected Dimension clientSS;
+	protected Dimension serverSS = Toolkit.getDefaultToolkit().getScreenSize();
 	private ObjectInputStream ois = null;
+	private int wRatio = serverSS.width / clientSS.width;
+	private int hRatio = serverSS.height / clientSS.height;
 	WorkerRobot robot = null;
 
 	public void init() {
 		new ServerGUI();
 	}
 
-	
 	public class ServerGUI {
-		protected JButton disconnect;
+
+		protected JButton end;
 
 		public ServerGUI() {
 			// Create a new JFrame.
 			JFrame gui = new JFrame();
+
 			// set up grid layout with 1 row and column.
 			gui.setLayout(new GridLayout(1, 1));
+
 			// make the program terminate when the window is closed
 			gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 			// give the window a title
 			gui.setTitle("Server Control");
+
 			// set the size of the window
 			gui.setSize(250, 200);
-
-			disconnect = new JButton("Disconnect");
-
-			disconnect.addActionListener(new ServerListener(gui));
-			gui.add(disconnect);
+			System.out.println("run");
+			end = new JButton("End");
+			end.addActionListener(new ServerListener(gui));
+			gui.add(end);
 			gui.setVisible(true);
 			new Server().start();
 		}
 	}
 
-	
 	public class ServerListener implements ActionListener {
 		public JFrame Gui;
 
@@ -58,11 +66,11 @@ public class ServerObj extends Applet {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			Gui.setVisible(false);
+			System.exit(1);
+
 		}
 	}
 
-	
 	public class Server extends Thread {
 		public Server() {
 			this.run();
@@ -80,6 +88,9 @@ public class ServerObj extends Applet {
 				ois = new ObjectInputStream(skt.getInputStream()); // skt's
 				// input
 				// stream
+
+				clientSS = (Dimension) ois.readObject();
+				clientSS.setSize(clientSS.width / 3, clientSS.height / 3);
 
 				PrintWriter out = new PrintWriter(skt.getOutputStream(), true); // skt's
 				// output
@@ -102,14 +113,12 @@ public class ServerObj extends Applet {
 				out.close(); //
 				skt.close(); // close all resources
 				srvr.close(); //
-			} 
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();// "No connection found\n");
 			}
 		}
 	}
 
-	
 	public class WorkerRobot {
 		private Robot walle;
 
@@ -117,33 +126,17 @@ public class ServerObj extends Applet {
 		public WorkerRobot() {
 			try {
 				walle = new Robot();
-			} 
-			catch (AWTException e) {
+			} catch (AWTException e) {
 				System.out.println("Wall-e has died");
 			}
 		}
 
 		/**
-		 * recieves an array of integers 
-		 *     [0]: (0,1,2,3) 
-		 *         0: mouse click 
-		 *             [1]: (0,1) 
-		 *                 0: mouse press 
-		 *                 1: mouse release 
-		 *             [2]: (0,1,2) 
-		 *                 0: left button 
-		 *                 1: middle button 
-		 *                 2: right button 
-		 *         1: mouse wheel 
-		 *             [1]: number of notches
-		 *         2: mouse motion 
-		 *             [1]: x coordinates 
-		 *             [2]: y coordinates 
-		 *         3: keyboard
-		 *             [1]: (0,1) 
-		 *                 0: key press 
-		 *                 1: key release 
-		 *             [2]: key number
+		 * recieves an array of integers [0]: (0,1,2,3) 0: mouse click [1]:
+		 * (0,1) 0: mouse press 1: mouse release [2]: (0,1,2) 0: left button 1:
+		 * middle button 2: right button 1: mouse wheel [1]: number of notches
+		 * 2: mouse motion [1]: x coordinates [2]: y coordinates 3: keyboard
+		 * [1]: (0,1) 0: key press 1: key release [2]: key number
 		 */
 		public void work(int[] task) {
 			// mouse click
@@ -184,7 +177,8 @@ public class ServerObj extends Applet {
 			}
 			// mouse motion
 			else if (task[0] == 2) {
-				walle.mouseMove(task[1], task[2]);
+				walle.mouseMove(task[1] * wRatio, task[2] * hRatio);
+
 			}
 			// keyboard
 			else if (task[0] == 3) {

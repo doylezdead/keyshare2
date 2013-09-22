@@ -20,10 +20,12 @@ import javax.swing.JFrame;
 public class ServerObj extends Applet {
 
 	protected Dimension clientSS;
+	protected int hRatio;
+	protected int wRatio;
+
 	protected Dimension serverSS = Toolkit.getDefaultToolkit().getScreenSize();
 	private ObjectInputStream ois = null;
-	private int wRatio = serverSS.width / clientSS.width;
-	private int hRatio = serverSS.height / clientSS.height;
+	
 	WorkerRobot robot = null;
 
 	public void init() {
@@ -90,7 +92,9 @@ public class ServerObj extends Applet {
 				// stream
 
 				clientSS = (Dimension) ois.readObject();
-				clientSS.setSize(clientSS.width / 3, clientSS.height / 3);
+				wRatio = serverSS.width / clientSS.width;
+				hRatio = serverSS.height / clientSS.height;
+				clientSS.setSize(clientSS.width / 2, clientSS.height / 2);
 
 				PrintWriter out = new PrintWriter(skt.getOutputStream(), true); // skt's
 				// output

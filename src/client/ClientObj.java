@@ -23,6 +23,8 @@ import java.net.Socket;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import java.applet.*;
+
 
 /**
  * Keyshare: the keyboard and mouse sharing program
